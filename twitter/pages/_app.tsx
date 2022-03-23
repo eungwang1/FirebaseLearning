@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import router from "next/router";
 import { authService } from "@src/fbase";
 import { onAuthStateChanged } from "firebase/auth";
+import Navigation from "@src/components/Navigation";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [init, setInit] = useState(false);
@@ -27,6 +28,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <Navigation />
       {init ? <Component {...pageProps} /> : <div>initializing...</div>}
       <footer>&copy; {new Date().getFullYear()} Twitter</footer>
     </>
