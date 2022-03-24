@@ -1,9 +1,7 @@
 import { authService, dbService } from "@src/fbase";
 import { updateProfile, User } from "firebase/auth";
 import React, { useEffect, useState } from "react";
-import router from "next/router";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
-import { async } from "@firebase/util";
 
 type Props = {};
 
@@ -24,9 +22,7 @@ const Profile = ({ userObj, refreshUser }: { userObj: null | User; refreshUser: 
         orderBy("createdAt"),
       );
       const tweetsQuerySnapshot = await getDocs(tweetsQuery);
-      tweetsQuerySnapshot.forEach((doc) => {
-        console.log(doc.data());
-      });
+      tweetsQuerySnapshot.forEach((doc) => {});
     }
   };
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,17 +46,28 @@ const Profile = ({ userObj, refreshUser }: { userObj: null | User; refreshUser: 
   };
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
+    <div className="container">
+      <form onSubmit={onSubmit} className="profileForm">
         <input
           type="text"
           placeholder="Display name"
           onChange={onChange}
+          autoFocus
+          className="formInput"
           value={newDisplayName as string}
         />
-        <input type="submit" value="Update Profile" />
+        <input
+          type="submit"
+          value="Update Profile"
+          className="formBtn"
+          style={{
+            marginTop: 10,
+          }}
+        />
       </form>
-      <button onClick={onLogOutClick}>Log Out</button>
+      <span className="formBtn cancelBtn logOut" onClick={onLogOutClick}>
+        Log Out
+      </span>
     </div>
   );
 };

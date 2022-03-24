@@ -1,9 +1,11 @@
-import { dbService, storageService } from "@src/fbase";
+import { storageService } from "@src/fbase";
 import { User } from "firebase/auth";
-import { addDoc, collection, CollectionReference, DocumentData } from "firebase/firestore";
+import { addDoc, CollectionReference, DocumentData } from "firebase/firestore";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import React, { FormEvent, useState } from "react";
 import { v4 as uuid } from "uuid";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 interface CustomHTMLInputElement extends HTMLInputElement {
   result: string;
@@ -17,6 +19,9 @@ const TweetFactory = ({ userObj, tweetsCollectionRef }: Props) => {
   const [tweet, setTweet] = useState("");
   const [attachment, setAttachment] = useState("");
   const onSubmit = async (event: FormEvent) => {
+    if (tweet === "") {
+      return;
+    }
     event.preventDefault();
     let attachmentUrl = "";
     if (attachment) {
@@ -52,27 +57,53 @@ const TweetFactory = ({ userObj, tweetsCollectionRef }: Props) => {
         setAttachment(result);
       };
       reader.readAsDataURL(theFile);
-      console.log(theFile);
     }
   };
   const onClearAttachment = () => setAttachment("");
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} className="factoryForm">
+      <div className="factoryInput__container">
+        <input
+          className="factoryInput__input"
+          value={tweet}
+          onChange={onChange}
+          type="text"
+          placeholder="What's on your mind?"
+          maxLength={120}
+        />
+        <input
+          type="submit"
+          value="&rarr;"
+          className="factoryInput__arrow"
+          style={{ cursor: "pointer" }}
+        />
+      </div>
+      <label htmlFor="attach-file" className="factoryInput__label">
+        <span>Add photos</span>
+        <FontAwesomeIcon icon={faPlus} />
+      </label>
       <input
-        type="text"
-        placeholder="What's on your mind?"
-        maxLength={120}
-        value={tweet}
-        onChange={onChange}
+        id="attach-file"
+        type="file"
+        accept="image/*"
+        onChange={onFileChange}
+        style={{
+          opacity: 0,
+        }}
       />
-      <input type="file" accept="image/*" onChange={onFileChange} />
-      <input type="submit" value="tweet" />
+
       {attachment && (
-        <div>
-          <img src={attachment} width="50px" height="50px" />
-          <button onClick={onClearAttachment} type="button">
-            Clear
-          </button>
+        <div className="factoryForm__attachment">
+          <img
+            src={attachment}
+            style={{
+              backgroundImage: attachment,
+            }}
+          />
+          <div className="factoryForm__clear" onClick={onClearAttachment}>
+            <span>Remove</span>
+            <FontAwesomeIcon icon={faTimes} />
+          </div>
         </div>
       )}
     </form>
