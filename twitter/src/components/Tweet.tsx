@@ -1,6 +1,7 @@
-import { dbService } from "@src/fbase";
+import { dbService, storageService } from "@src/fbase";
 import { Itweet } from "@src/types/allTypes";
 import { deleteDoc, doc, DocumentData, updateDoc } from "firebase/firestore";
+import { deleteObject, ref } from "firebase/storage";
 import React, { useState } from "react";
 
 interface ITweet {
@@ -23,6 +24,7 @@ const Tweet = ({ tweetObj, isOwner }: ITweet) => {
 
     if (ok) {
       await deleteDoc(doc(dbService, `tweets/${tweetObj.id}`));
+      await deleteObject(ref(storageService, tweetObj.attachmentUrl));
     }
   };
   const onEditClick = async () => {
