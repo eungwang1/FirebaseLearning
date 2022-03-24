@@ -1,21 +1,19 @@
-import { GoogleAuthProvider, signInWithPopup, GithubAuthProvider } from "@firebase/auth";
-import { authService } from "@src/fbase";
-import AuthForm from "./AuthForm";
 import React from "react";
+import { authService } from "@src/fbase";
+import { GoogleAuthProvider, signInWithPopup, GithubAuthProvider } from "@firebase/auth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTwitter, faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
+import AuthForm from "./AuthForm";
 
-type Props = {};
-
-const Auth = (props: Props) => {
+const Auth = () => {
   const onSocialClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     const { name } = event.target as HTMLButtonElement;
     if (name === "google") {
       const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(authService, provider);
+      await signInWithPopup(authService, provider);
     } else if (name === "github") {
       const provider = new GithubAuthProvider();
-      const result = await signInWithPopup(authService, provider);
+      await signInWithPopup(authService, provider);
     }
   };
   return (

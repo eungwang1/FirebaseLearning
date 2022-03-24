@@ -1,10 +1,10 @@
 {
   "parser": "@typescript-eslint/parser",
-  "plugins": ["testing-library", "@typescript-eslint", "react-hooks"],
+  "plugins": ["@typescript-eslint", "react-hooks"],
   "env": {
     "browser": true,
     "es6": true,
-    "node": true,
+    "node": true
   },
   "extends": [
     "airbnb-base",
@@ -13,7 +13,7 @@
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
+    "plugin:prettier/recommended"
   ],
   "rules": {
     "@typescript-eslint/explicit-function-return-type": 0,
