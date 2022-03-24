@@ -2,7 +2,7 @@
 - 기술 스택
   - Frontend : Typescript, React
   - Backend : Firebase
-  - Deployment : AWS, vercel
+  - Deployment : vercel
  
 ## Firebase 학습내용
 - Google,GitHub OAuth로그인
@@ -20,3 +20,6 @@
 | Profile |
 |![image](https://user-images.githubusercontent.com/86244477/159988003-74969cce-ca41-4a73-a58e-78496161931b.png)|
 | Auth |
+
+## 베포 링크
+https://firebase-learning-git-main-eungwang1.vercel.app/Auth
