@@ -1,30 +1,29 @@
-import { authService, dbService } from "@src/fbase";
+import { authService } from "@src/fbase";
 import { updateProfile, User } from "firebase/auth";
-import React, { useEffect, useState } from "react";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
-
-type Props = {};
+import React, { useState } from "react";
 
 const Profile = ({ userObj, refreshUser }: { userObj: null | User; refreshUser: () => void }) => {
   const [newDisplayName, setNewDisplayName] = useState(userObj?.displayName);
-  useEffect(() => {
-    getMyTweets();
-  }, []);
+  // useEffect(() => {
+  //   getMyTweets();
+  // }, []);
   const onLogOutClick = () => {
     authService.signOut();
   };
-  const getMyTweets = async () => {
-    const tweetsRef = collection(dbService, "tweets");
-    if (userObj) {
-      const tweetsQuery = query(
-        tweetsRef,
-        where("creatorid", "==", userObj?.uid),
-        orderBy("createdAt"),
-      );
-      const tweetsQuerySnapshot = await getDocs(tweetsQuery);
-      tweetsQuerySnapshot.forEach((doc) => {});
-    }
-  };
+  // const getMyTweets = async () => {
+  //   const tweetsRef = collection(dbService, "tweets");
+  //   if (userObj) {
+  //     const tweetsQuery = query(
+  //       tweetsRef,
+  //       where("creatorid", "==", userObj?.uid),
+  //       orderBy("createdAt"),
+  //     );
+  //     const tweetsQuerySnapshot = await getDocs(tweetsQuery);
+  //     tweetsQuerySnapshot.forEach((doc) => {
+  //       console.log(doc.data());
+  //     });
+  //   }
+  // };
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { value },
@@ -36,10 +35,11 @@ const Profile = ({ userObj, refreshUser }: { userObj: null | User; refreshUser: 
     event.preventDefault();
     if (userObj && userObj.displayName !== newDisplayName) {
       const user = authService.currentUser;
-      user &&
-        (await updateProfile(user, {
+      if (user) {
+        await updateProfile(user, {
           displayName: newDisplayName,
-        }));
+        });
+      }
 
       refreshUser();
     }
@@ -52,7 +52,6 @@ const Profile = ({ userObj, refreshUser }: { userObj: null | User; refreshUser: 
           type="text"
           placeholder="Display name"
           onChange={onChange}
-          autoFocus
           className="formInput"
           value={newDisplayName as string}
         />

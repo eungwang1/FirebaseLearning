@@ -47,13 +47,13 @@ const TweetFactory = ({ userObj, tweetsCollectionRef }: Props) => {
     setTweet(value);
   };
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files: FileList | null = event.target.files;
+    const { files } = event.target;
     const reader = new FileReader();
     let theFile: File;
     if (files !== null) {
       theFile = files[0];
       reader.onloadend = (finishedEvent) => {
-        const result = (finishedEvent.currentTarget as CustomHTMLInputElement).result;
+        const { result } = finishedEvent.currentTarget as CustomHTMLInputElement;
         setAttachment(result);
       };
       reader.readAsDataURL(theFile);
@@ -95,6 +95,7 @@ const TweetFactory = ({ userObj, tweetsCollectionRef }: Props) => {
       {attachment && (
         <div className="factoryForm__attachment">
           <img
+            alt=""
             src={attachment}
             style={{
               backgroundImage: attachment,

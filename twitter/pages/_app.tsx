@@ -1,11 +1,10 @@
+import React, { useEffect, useState } from "react";
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { useEffect, useState } from "react";
 import router from "next/router";
 import { authService } from "@src/fbase";
 import { onAuthStateChanged, updateProfile, User } from "firebase/auth";
 import Navigation from "@src/components/Navigation";
-import axios from "axios";
 import { IuserObj } from "@src/types/allTypes";
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -30,21 +29,22 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
   const refreshUser = () => {
     const user = authService.currentUser;
-    user &&
+    if (user) {
       setUserObj({
         displayName: user.displayName,
         uid: user.uid,
       } as User);
+    }
   };
   return (
     <>
       <Navigation userObj={userObj} />
       <div
         style={{
-          maxWidth: 890,
+          maxWidth: "890px",
           width: "100%",
           margin: "0 auto",
-          marginTop: 80,
+          marginTop: "80px",
           display: "flex",
           justifyContent: "center",
         }}

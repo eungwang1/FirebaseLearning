@@ -2,9 +2,7 @@ import { authService } from "@src/fbase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 
-type Props = {};
-
-const AuthForm = (props: Props) => {
+const AuthForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newAccount, setNewAccount] = useState(true);
@@ -24,9 +22,9 @@ const AuthForm = (props: Props) => {
     event.preventDefault();
     try {
       if (newAccount) {
-        const data = await createUserWithEmailAndPassword(authService, email, password);
+        await createUserWithEmailAndPassword(authService, email, password);
       } else {
-        const data = await signInWithEmailAndPassword(authService, email, password);
+        await signInWithEmailAndPassword(authService, email, password);
       }
     } catch (error) {
       if (error instanceof Error) {

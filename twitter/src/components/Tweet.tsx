@@ -46,7 +46,6 @@ const Tweet = ({ tweetObj, isOwner }: ITweet) => {
                 name="newTweet"
                 value={newTweet}
                 onChange={onChange}
-                autoFocus
                 className="formInput"
                 required
               />
@@ -61,7 +60,7 @@ const Tweet = ({ tweetObj, isOwner }: ITweet) => {
         ) : (
           <>
             <h4>{tweetObj.text}</h4>
-            {tweetObj.attachmentUrl && <img src={tweetObj.attachmentUrl} />}
+            {tweetObj.attachmentUrl && <img src={tweetObj.attachmentUrl} alt="" />}
             {isOwner && (
               <div className="nweet__actions">
                 <span onClick={onDeleteClick}>

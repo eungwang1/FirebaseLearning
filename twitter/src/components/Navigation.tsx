@@ -5,8 +5,6 @@ import { IuserObj } from "@src/types/allTypes";
 import Link from "next/link";
 import React from "react";
 
-type Props = {};
-
 const Navigation = ({ userObj }: { userObj: null | IuserObj }) => {
   return (
     <div>

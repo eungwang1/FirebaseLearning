@@ -45,7 +45,8 @@
     "jsx-a11y/accessible-emoji": 0,
     "no-restricted-exports": 0,
     "no-unused-vars": 0,
-    "no-alert": 0
+    "no-alert": 0,
+    "prefer-destructuring": 0
   },
   "parserOptions": {
     "ecmaFeatures": {
