@@ -4,12 +4,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
 import router from "next/router";
 import { authService } from "@src/fbase";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, User } from "firebase/auth";
 import Navigation from "@src/components/Navigation";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [init, setInit] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userObj, setUserObj] = useState<User | null>(null);
   // setInterval(() => {
   //   console.log(authService.currentUser);
   // }, 2000);
@@ -18,6 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       if (user) {
         router.push("/Home");
         setIsLoggedIn(true);
+        setUserObj(user);
       } else {
         router.push("/Auth");
         setIsLoggedIn(false);
@@ -29,7 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Navigation />
-      {init ? <Component {...pageProps} /> : <div>initializing...</div>}
+      {init ? <Component {...pageProps} userObj={userObj} /> : <div>initializing...</div>}
       <footer>&copy; {new Date().getFullYear()} Twitter</footer>
     </>
   );
