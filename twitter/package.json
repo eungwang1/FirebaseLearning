@@ -26,7 +26,8 @@
     "react-slick": "^0.28.1",
     "react-spinners": "^0.11.0",
     "slick-carousel": "^1.8.1",
-    "styled-components": "^5.3.3"
+    "styled-components": "^5.3.3",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/node": "17.0.22",
@@ -36,6 +37,7 @@
     "@types/react-slick": "^0.23.8",
     "@types/redux-logger": "^3.0.9",
     "@types/styled-components": "^5.1.21",
+    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
     "eslint": "8.11.0",

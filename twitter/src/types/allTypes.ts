@@ -3,4 +3,5 @@ export interface Itweet {
   createdAt: number;
   text: string;
   creatorid: string;
+  attachmentUrl: string;
 }

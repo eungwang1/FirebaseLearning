@@ -6,6 +6,7 @@ import router from "next/router";
 import { authService } from "@src/fbase";
 import { onAuthStateChanged, User } from "firebase/auth";
 import Navigation from "@src/components/Navigation";
+import axios from "axios";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [init, setInit] = useState(false);
@@ -14,6 +15,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   // setInterval(() => {
   //   console.log(authService.currentUser);
   // }, 2000);
+
   useEffect(() => {
     onAuthStateChanged(authService, (user) => {
       if (user) {
@@ -32,7 +34,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <Navigation />
       {init ? <Component {...pageProps} userObj={userObj} /> : <div>initializing...</div>}
-      <footer>&copy; {new Date().getFullYear()} Twitter</footer>
     </>
   );
 }

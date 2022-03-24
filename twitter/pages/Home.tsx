@@ -1,7 +1,8 @@
 import Tweet from "@src/components/Tweet";
-import { dbService } from "@src/fbase";
+import { dbService, storageService } from "@src/fbase";
 import { Itweet } from "@src/types/allTypes";
 import { User } from "firebase/auth";
+import { v4 as uuid } from "uuid";
 import {
   addDoc,
   collection,
@@ -13,32 +14,22 @@ import {
   onSnapshot,
   Unsubscribe,
 } from "firebase/firestore";
+import { getDownloadURL, ref, updateMetadata, uploadString } from "firebase/storage";
 import React, { FormEvent, useEffect, useState } from "react";
+import { finished } from "stream";
 import { runInNewContext } from "vm";
 
 type Props = {};
+interface CustomHTMLInputElement extends HTMLInputElement {
+  result: string;
+}
 
 const Home = ({ userObj }: { userObj: null | User }) => {
   const [tweet, setTweet] = useState("");
   const [tweets, setTweets] = useState<DocumentData[] | Itweet[]>([]);
-  // console.log(userObj);
+  const [attachment, setAttachment] = useState("");
   const tweetsCollectionRef = collection(dbService, "tweets");
-  const getTweets = async () => {
-    // 단일문서
-    // const tweetsDoc = await getDoc(doc(dbService, "tweets", "HNLsTw4uAvlihO8bO6yi"));
-    // console.log(tweetsDoc.data());
-    // 모든문서
-    const tweetsDoc = await getDocs(collection(dbService, "tweets"));
-    tweetsDoc.forEach((doc) => {
-      const tweetObject = {
-        ...doc.data(),
-        id: doc.id,
-      };
-      setTweets((prev) => {
-        return [tweetObject, ...prev];
-      });
-    });
-  };
+
   useEffect(() => {
     onSnapshot(tweetsCollectionRef, (snapshot) => {
       const tweetsArr = snapshot.docs.map((doc) => ({
@@ -51,13 +42,22 @@ const Home = ({ userObj }: { userObj: null | User }) => {
   }, []);
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
-
-    await addDoc(tweetsCollectionRef, {
+    let attachmentUrl = "";
+    if (attachment) {
+      const attachmentRef = ref(storageService, `${userObj?.uid}/${uuid()}`);
+      const response = await uploadString(attachmentRef, attachment, "data_url");
+      attachmentUrl = await getDownloadURL(response.ref);
+    }
+    const tweetObj = {
       text: tweet,
       createdAt: Date.now(),
       creatorid: userObj?.uid,
-    });
+      attachmentUrl,
+    };
+    await addDoc(tweetsCollectionRef, tweetObj);
+
     setTweet("");
+    setAttachment("");
   };
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -65,6 +65,21 @@ const Home = ({ userObj }: { userObj: null | User }) => {
     } = event;
     setTweet(value);
   };
+  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files: FileList | null = event.target.files;
+    const reader = new FileReader();
+    let theFile: File;
+    if (files !== null) {
+      theFile = files[0];
+      reader.onloadend = (finishedEvent) => {
+        const result = (finishedEvent.currentTarget as CustomHTMLInputElement).result;
+        setAttachment(result);
+      };
+      reader.readAsDataURL(theFile);
+      console.log(theFile);
+    }
+  };
+  const onClearAttachment = () => setAttachment("");
 
   return (
     <div>
@@ -76,7 +91,16 @@ const Home = ({ userObj }: { userObj: null | User }) => {
           value={tweet}
           onChange={onChange}
         />
+        <input type="file" accept="image/*" onChange={onFileChange} />
         <input type="submit" value="tweet" />
+        {attachment && (
+          <div>
+            <img src={attachment} width="50px" height="50px" />
+            <button onClick={onClearAttachment} type="button">
+              Clear
+            </button>
+          </div>
+        )}
         <div>
           {tweets.map((tweet) => (
             <Tweet key={tweet.id} tweetObj={tweet} isOwner={tweet.creatorid === userObj?.uid} />
