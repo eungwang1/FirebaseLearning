@@ -21,5 +21,5 @@
 |![image](https://user-images.githubusercontent.com/86244477/159988003-74969cce-ca41-4a73-a58e-78496161931b.png)|
 | Auth |
 
-## 베포 링크
+## 배포 링크
 https://firebase-learning-git-main-eungwang1.vercel.app/Auth
